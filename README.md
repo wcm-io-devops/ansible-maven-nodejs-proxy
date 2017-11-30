@@ -164,9 +164,9 @@ The configuration used for the
 
 The role has no hard coded depencencies but works well together with
 
-* geerlingguy.java
-* role: gantsign.maven
-* geerlingguy.git
+* [geerlingguy.java](https://galaxy.ansible.com/geerlingguy/java/)
+* [gantsign.maven](https://galaxy.ansible.com/gantsign/maven/)
+* [geerlingguy.git](https://galaxy.ansible.com/geerlingguy/git/)
 
 ## Example Playbook
 
