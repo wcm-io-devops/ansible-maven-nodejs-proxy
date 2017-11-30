@@ -1,7 +1,7 @@
 # maven-nodejs-proxy
 
-This role installs the (Maven NodeJS
-Proxy)[https://github.com/wcm-io-devops/maven-nodejs-proxy] via ansible.
+This role installs the wcm.io [Maven NodeJS
+Proxy](https://github.com/wcm-io-devops/maven-nodejs-proxy).
 
 ## Requirements
 
