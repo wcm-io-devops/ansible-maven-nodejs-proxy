@@ -1,0 +1,84 @@
+- fail:
+    msg: "Currently only systems that are managed by systemd are supported"
+  when: ansible_service_mgr != 'systemd'
+
+- name: Create maven-nodejs-proxy group.
+  group:
+    name: "{{ maven_nodejs_proxy_group }}"
+    state: present
+
+- name: Create maven-nodejs-proxy user.
+  user:
+    name: "{{ maven_nodejs_proxy_user }}"
+    group: "{{ maven_nodejs_proxy_group }}"
+    append: yes
+    system: yes
+    state: present
+
+- name: Create maven-nodejs-proxy home folder.
+  file:
+    path: "{{ maven_nodejs_proxy_home }}"
+    state: directory
+    owner: "{{ maven_nodejs_proxy_user }}"
+    group: "{{ maven_nodejs_proxy_group }}"
+
+- name: Create maven-nodejs-proxy log folder.
+  file:
+    path: "{{ maven_nodejs_proxy_log_dir }}"
+    state: directory
+    owner: "{{ maven_nodejs_proxy_user }}"
+    group: "{{ maven_nodejs_proxy_group }}"
+
+- name: check if maven-nodejs-proxy is already there
+  stat:
+    path: "{{ maven_nodejs_proxy_binary_path }}"
+  register: maven_nodejs_proxy_binary_path_result
+
+- block:
+  - name: Create maven-nodejs-proxy tmp folder.
+    file:
+      path: "{{ maven_nodejs_proxy_tmp }}"
+      state: directory
+
+  - name: Clone maven-nodejs-proxy in given version
+    git:
+      repo: "{{ maven_nodejs_proxy_repo }}"
+      dest: "{{ maven_nodejs_proxy_tmp }}"
+      version: "{{ maven_nodejs_proxy_version|default(omit) }}"
+      force: yes
+      accept_hostkey: true
+
+  - name: Build Maven command line.
+    set_fact:
+      _mvn_cmdline: "{{ maven_nodejs_proxy_maven_cmd }} {{ maven_nodejs_proxy_maven_opts }} clean install"
+
+  - name: Add custom Maven settings.
+    set_fact:
+      _mvn_cmdline: "{{ _mvn_cmdline }} --settings={{ maven_nodejs_proxy_maven_settings }}"
+    when: maven_nodejs_proxy_maven_settings is defined
+
+  - name: Compile maven-nodejs-proxy with Maven.
+    shell: "{{ _mvn_cmdline }}"
+    args:
+      chdir: "{{ maven_nodejs_proxy_tmp }}"
+
+  - name: Copy compiled artifact to maven-nodejs-proxy home
+    copy:
+      remote_src: yes
+      src: "{{ maven_nodejs_proxy_tmp_binary_path }}"
+      dest: "{{ maven_nodejs_proxy_binary_path }}"
+      owner: "{{ maven_nodejs_proxy_user }}"
+      group: "{{ maven_nodejs_proxy_group }}"
+  when: maven_nodejs_proxy_force_compile or maven_nodejs_proxy_binary_path_result.stat.exists == false
+
+- name: Create config.yml and transfer to remote machine
+  template:
+    src: "templates/config.yml.j2"
+    dest: "{{ maven_nodejs_proxy_config_path }}"
+    owner: "{{ maven_nodejs_proxy_user }}"
+    group: "{{ maven_nodejs_proxy_group }}"
+  register: maven_nodejs_proxy_config
+
+- name: Setup maven-nodejs-proxy systemd unit.
+  include: systemd.yml
+  when: ansible_service_mgr == 'systemd'

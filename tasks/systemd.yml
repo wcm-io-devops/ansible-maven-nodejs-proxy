@@ -1,0 +1,18 @@
+- name: Create maven-nodejs-proxy systemd unit file.
+  template:
+    src: maven-nodejs-proxy.service.j2
+    dest: "/etc/systemd/system/{{ maven_nodejs_proxy_service_name }}.service"
+    mode: "0755"
+
+- name: Enable maven-nodejs-proxy service.
+  systemd:
+    name: "{{ maven_nodejs_proxy_service_name }}"
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+- name: Restart maven-nodejs-proxy service.
+  systemd:
+    name: "{{ maven_nodejs_proxy_service_name }}"
+    state: restarted
+  when: maven_nodejs_proxy_config.changed

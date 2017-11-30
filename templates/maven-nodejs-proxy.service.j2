@@ -1,0 +1,16 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description={{ maven_nodejs_proxy_service_name }}
+After=multi-user.target
+Requires=network.target
+
+[Service]
+WorkingDirectory={{ maven_nodejs_proxy_home }}
+SyslogIdentifier=SocketTest
+ExecStart=/bin/sh -c "exec {{ maven_nodejs_proxy_service_args }}"
+User={{ maven_nodejs_proxy_user }}
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

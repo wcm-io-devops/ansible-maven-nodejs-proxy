@@ -1,0 +1,20 @@
+galaxy_info:
+  author: Tobias Richter
+  description: Installs maven-nodejs-proxy from https://github.com/wcm-io-devops/maven-nodejs-proxy
+  company: pro!vision
+  issue_tracker_url: https://wcm-io.atlassian.net
+  license: Apache 2.0
+  min_ansible_version: 2.0
+
+  platforms:
+  - name: Ubuntu
+      versions:
+      - xenial
+    - name: Debian
+      versions:
+      - stretch
+
+  galaxy_tags:
+    - maven
+    - nodejs
+    - nexus

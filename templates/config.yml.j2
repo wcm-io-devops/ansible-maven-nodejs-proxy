@@ -1,0 +1,57 @@
+# This is a Dropwizard-based Microservice
+# See https://dropwizard.github.io/dropwizard/manual/configuration.html
+
+# Group Id to publish artifacts to
+groupId: {{ maven_nodejs_proxy_config.groupId }}
+
+# Artifact Id to publish NodeJS binaries
+nodeJsArtifactId: {{ maven_nodejs_proxy_config.nodeJsArtifactId }}
+
+# Artifact Id to publish NPM binaries
+npmArtifactId: {{ maven_nodejs_proxy_config.npmArtifactId }}
+
+# Root URL to download NodeJS binaries from
+nodeJsBinariesRootUrl: "{{ maven_nodejs_proxy_config.nodeJsBinariesRootUrl }}"
+
+# Url parts to download the different artifacts
+nodeJsBinariesUrl: "{{ maven_nodejs_proxy_config.nodeJsBinariesUrl }}"
+nodeJsBinariesUrlWindows: "{{ maven_nodejs_proxy_config.nodeJsBinariesUrlWindows }}"
+nodeJsBinariesUrlWindowsX86Legacy: "{{ maven_nodejs_proxy_config.nodeJsBinariesUrlWindowsX86Legacy }}"
+nodeJsBinariesUrlWindowsX64Legacy: "{{ maven_nodejs_proxy_config.nodeJsBinariesUrlWindowsX64Legacy }}"
+npmBinariesUrl: "{{ maven_nodejs_proxy_config.npmBinariesUrl }}"
+
+# SHA-256 checksums file
+nodeJsChecksumUrl: "{{ maven_nodejs_proxy_config.nodeJsChecksumUrl }}"
+
+# Sample versions for index page
+nodeJsSampleVersion: 4.4.0
+npmSampleVersion: 1.4.9
+
+# HTTP Client settings
+httpClient:
+  connectionTimeout: {{ maven_nodejs_proxy_config.httpClient.connectionTimeout }}
+  timeout: {{ maven_nodejs_proxy_config.httpClient.timeout }}
+  timeToLive: {{ maven_nodejs_proxy_config.httpClient.timeToLive }}
+  cookiesEnabled: {{ maven_nodejs_proxy_config.httpClient.cookiesEnabled }}
+  retries: {{ maven_nodejs_proxy_config.httpClient.retries }}
+  userAgent: {{ maven_nodejs_proxy_config.httpClient.userAgent }}
+
+# Jetty configuration
+server:
+  # Disable gzip compression to avoid corruption of tar.gz files
+  gzip:
+    enabled: {{ maven_nodejs_proxy_config.server.gzip.enabled }}
+  applicationConnectors:
+    - type: http
+      port: {{ maven_nodejs_proxy_port }}
+
+# Logging configuration
+logging:
+  level: {{ maven_nodejs_proxy_config.logging.level }}
+  appenders:
+    - type: file
+      currentLogFilename: "{{ maven_nodejs_proxy_log_file }}"
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: "{{ maven_nodejs_proxy_log_file_archive }}"
+      archivedFileCount: 5
