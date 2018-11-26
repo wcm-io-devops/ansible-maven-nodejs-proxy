@@ -1,4 +1,4 @@
-# maven-nodejs-proxy
+# wcm_io_devops.maven_nodejs_proxy
 
 This role installs the wcm.io [Maven NodeJS
 Proxy](https://github.com/wcm-io-devops/maven-nodejs-proxy).
@@ -180,7 +180,7 @@ The role has no hard coded depencencies but works well together with
         - role: geerlingguy.java
         - role: gantsign.maven
         - role: geerlingguy.git
-        - role: maven-nodejs-proxy
+        - role: wcm_io_devops.maven_nodejs_proxy
 
 ## License
 
