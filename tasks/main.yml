@@ -1,4 +1,5 @@
-- fail:
+- name: Fail when service manager is not supported.
+  fail:
     msg: "Currently only systems that are managed by systemd are supported"
   when: ansible_service_mgr != 'systemd'
 
