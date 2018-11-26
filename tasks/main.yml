@@ -59,7 +59,7 @@
     when: maven_nodejs_proxy_maven_settings is defined
 
   - name: Compile maven-nodejs-proxy with Maven.
-    shell: "{{ _mvn_cmdline }}"
+    command: "{{ _mvn_cmdline }}"
     args:
       chdir: "{{ maven_nodejs_proxy_tmp }}"
 
