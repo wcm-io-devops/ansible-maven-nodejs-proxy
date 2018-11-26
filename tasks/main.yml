@@ -51,7 +51,7 @@
 
   - name: Build Maven command line.
     set_fact:
-      _mvn_cmdline: "{{ maven_nodejs_proxy_maven_cmd }} {{ maven_nodejs_proxy_maven_opts }} clean install"
+      _mvn_cmdline: "{{ maven_nodejs_proxy_maven_cmd }} {{ maven_nodejs_proxy_maven_opts }} clean install -DskipTests"
 
   - name: Add custom Maven settings.
     set_fact:
@@ -70,6 +70,8 @@
       dest: "{{ maven_nodejs_proxy_binary_path }}"
       owner: "{{ maven_nodejs_proxy_user }}"
       group: "{{ maven_nodejs_proxy_group }}"
+    notify:
+      - maven_nodejs_proxy restart
   when: maven_nodejs_proxy_force_compile or not maven_nodejs_proxy_binary_path_result.stat.exists
 
 - name: Create config.yml and transfer to remote machine
