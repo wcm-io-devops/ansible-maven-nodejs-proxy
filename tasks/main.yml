@@ -70,7 +70,7 @@
       dest: "{{ maven_nodejs_proxy_binary_path }}"
       owner: "{{ maven_nodejs_proxy_user }}"
       group: "{{ maven_nodejs_proxy_group }}"
-  when: maven_nodejs_proxy_force_compile or maven_nodejs_proxy_binary_path_result.stat.exists == false
+  when: maven_nodejs_proxy_force_compile or not maven_nodejs_proxy_binary_path_result.stat.exists
 
 - name: Create config.yml and transfer to remote machine
   template:

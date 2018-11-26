@@ -49,4 +49,3 @@ maven_nodejs_proxy_config:
       enabled: false
   logging:
     level: INFO
-
