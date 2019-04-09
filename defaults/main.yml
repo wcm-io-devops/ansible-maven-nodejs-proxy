@@ -2,7 +2,7 @@ maven_nodejs_proxy_maven_cmd: mvn
 maven_nodejs_proxy_maven_opts: "-B -U"
 maven_nodejs_proxy_repo: https://github.com/wcm-io-devops/maven-nodejs-proxy.git
 maven_nodejs_proxy_force_compile: false
-maven_nodejs_proxy_version: "1.1.0"
+maven_nodejs_proxy_version: "1.2.0"
 
 maven_nodejs_proxy_user: 'maven-nodejs-proxy'
 maven_nodejs_proxy_group: 'maven-nodejs-proxy'
@@ -35,6 +35,7 @@ maven_nodejs_proxy_config:
   nodeJsBinariesUrlWindows: "/v${version}/win-${arch}/node.${type}"
   nodeJsBinariesUrlWindowsX86Legacy: "/v${version}/node.${type}"
   nodeJsBinariesUrlWindowsX64Legacy: "/v${version}/${arch}/node.${type}"
+  nodeJsSampleVersion: 10.15.0
   npmBinariesUrl: "/npm/npm-${version}.${type}"
   nodeJsChecksumUrl: "/v${version}/SHASUMS256.txt"
   httpClient:
