@@ -141,6 +141,7 @@ maven_nodejs_proxy_config:
   nodeJsBinariesUrlWindows: "/v${version}/win-${arch}/node.${type}"
   nodeJsBinariesUrlWindowsX86Legacy: "/v${version}/node.${type}"
   nodeJsBinariesUrlWindowsX64Legacy: "/v${version}/${arch}/node.${type}"
+  nodeJsSampleVersion: 10.15.0
   npmBinariesUrl: "/npm/npm-${version}.${type}"
   nodeJsChecksumUrl: "/v${version}/SHASUMS256.txt"
   httpClient:

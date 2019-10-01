@@ -81,6 +81,8 @@
     owner: "{{ maven_nodejs_proxy_user }}"
     group: "{{ maven_nodejs_proxy_group }}"
   register: maven_nodejs_proxy_config
+  notify:
+    - maven_nodejs_proxy restart
 
 - name: Setup maven-nodejs-proxy systemd unit.
   include: systemd.yml

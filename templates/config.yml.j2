@@ -24,7 +24,7 @@ npmBinariesUrl: "{{ maven_nodejs_proxy_config.npmBinariesUrl }}"
 nodeJsChecksumUrl: "{{ maven_nodejs_proxy_config.nodeJsChecksumUrl }}"
 
 # Sample versions for index page
-nodeJsSampleVersion: 4.4.0
+nodeJsSampleVersion: {{ maven_nodejs_proxy_config.nodeJsSampleVersion }}
 npmSampleVersion: 1.4.9
 
 # HTTP Client settings
