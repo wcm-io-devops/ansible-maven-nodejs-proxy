@@ -1,3 +1,4 @@
+---
 - name: maven_nodejs_proxy restart
   systemd:
     name: "{{ maven_nodejs_proxy_service_name }}"

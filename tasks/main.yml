@@ -1,3 +1,4 @@
+---
 - name: Fail when service manager is not supported.
   fail:
     msg: "Currently only systems that are managed by systemd are supported"
@@ -36,42 +37,42 @@
   register: maven_nodejs_proxy_binary_path_result
 
 - block:
-  - name: Create maven-nodejs-proxy tmp folder.
-    file:
-      path: "{{ maven_nodejs_proxy_tmp }}"
-      state: directory
+    - name: Create maven-nodejs-proxy tmp folder.
+      file:
+        path: "{{ maven_nodejs_proxy_tmp }}"
+        state: directory
 
-  - name: Clone maven-nodejs-proxy in given version
-    git:
-      repo: "{{ maven_nodejs_proxy_repo }}"
-      dest: "{{ maven_nodejs_proxy_tmp }}"
-      version: "{{ maven_nodejs_proxy_version|default(omit) }}"
-      force: yes
-      accept_hostkey: true
+    - name: Clone maven-nodejs-proxy in given version
+      git:
+        repo: "{{ maven_nodejs_proxy_repo }}"
+        dest: "{{ maven_nodejs_proxy_tmp }}"
+        version: "{{ maven_nodejs_proxy_version|default(omit) }}"
+        force: yes
+        accept_hostkey: true
 
-  - name: Build Maven command line.
-    set_fact:
-      _mvn_cmdline: "{{ maven_nodejs_proxy_maven_cmd }} {{ maven_nodejs_proxy_maven_opts }} clean install -DskipTests"
+    - name: Build Maven command line.
+      set_fact:
+        _mvn_cmdline: "{{ maven_nodejs_proxy_maven_cmd }} {{ maven_nodejs_proxy_maven_opts }} clean install -DskipTests"
 
-  - name: Add custom Maven settings.
-    set_fact:
-      _mvn_cmdline: "{{ _mvn_cmdline }} --settings={{ maven_nodejs_proxy_maven_settings }}"
-    when: maven_nodejs_proxy_maven_settings is defined
+    - name: Add custom Maven settings.
+      set_fact:
+        _mvn_cmdline: "{{ _mvn_cmdline }} --settings={{ maven_nodejs_proxy_maven_settings }}"
+      when: maven_nodejs_proxy_maven_settings is defined
 
-  - name: Compile maven-nodejs-proxy with Maven.
-    command: "{{ _mvn_cmdline }}"
-    args:
-      chdir: "{{ maven_nodejs_proxy_tmp }}"
+    - name: Compile maven-nodejs-proxy with Maven.
+      command: "{{ _mvn_cmdline }}"
+      args:
+        chdir: "{{ maven_nodejs_proxy_tmp }}"
 
-  - name: Copy compiled artifact to maven-nodejs-proxy home
-    copy:
-      remote_src: yes
-      src: "{{ maven_nodejs_proxy_tmp_binary_path }}"
-      dest: "{{ maven_nodejs_proxy_binary_path }}"
-      owner: "{{ maven_nodejs_proxy_user }}"
-      group: "{{ maven_nodejs_proxy_group }}"
-    notify:
-      - maven_nodejs_proxy restart
+    - name: Copy compiled artifact to maven-nodejs-proxy home
+      copy:
+        remote_src: yes
+        src: "{{ maven_nodejs_proxy_tmp_binary_path }}"
+        dest: "{{ maven_nodejs_proxy_binary_path }}"
+        owner: "{{ maven_nodejs_proxy_user }}"
+        group: "{{ maven_nodejs_proxy_group }}"
+      notify:
+        - maven_nodejs_proxy restart
   when: maven_nodejs_proxy_force_compile or not maven_nodejs_proxy_binary_path_result.stat.exists
 
 - name: Create config.yml and transfer to remote machine

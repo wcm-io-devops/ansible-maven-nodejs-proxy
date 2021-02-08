@@ -1,3 +1,4 @@
+---
 - name: Create maven-nodejs-proxy systemd unit file.
   template:
     src: maven-nodejs-proxy.service.j2
