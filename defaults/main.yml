@@ -1,3 +1,4 @@
+---
 maven_nodejs_proxy_maven_cmd: mvn
 maven_nodejs_proxy_maven_opts: "-B -U"
 maven_nodejs_proxy_repo: https://github.com/wcm-io-devops/maven-nodejs-proxy.git
