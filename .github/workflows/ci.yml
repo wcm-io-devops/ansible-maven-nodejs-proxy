@@ -12,7 +12,6 @@ defaults:
   push:
     branches:
       - master
-      - "feature/migrate-to-github-actions"
 
 jobs:
 
