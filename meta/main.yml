@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   role_name: maven_nodejs_proxy
+  namespace: wcm_io_devops
   author: Tobias Richter
   description: Installs maven-nodejs-proxy from https://github.com/wcm-io-devops/maven-nodejs-proxy
   company: pro!vision
