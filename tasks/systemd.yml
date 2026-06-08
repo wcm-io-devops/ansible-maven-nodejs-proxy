@@ -1,15 +1,15 @@
 ---
 - name: Create maven-nodejs-proxy systemd unit file.
-  template:
+  ansible.builtin.template:
     src: maven-nodejs-proxy.service.j2
     dest: "/etc/systemd/system/{{ maven_nodejs_proxy_service_name }}.service"
-    mode: "0755"
+    mode: "0644"
   notify:
-    - maven_nodejs_proxy restart
+    - Maven_nodejs_proxy restart
 
 - name: Enable maven-nodejs-proxy service.
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ maven_nodejs_proxy_service_name }}"
-    enabled: yes
+    enabled: true
     state: started
-    daemon_reload: yes
+    daemon_reload: true
