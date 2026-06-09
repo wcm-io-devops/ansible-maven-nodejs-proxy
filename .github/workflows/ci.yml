@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Check out the codebase.
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
         with:
           path: '${{ env.ROLE_NAME }}'
 
@@ -46,7 +46,7 @@ jobs:
         run: "printf '[defaults]\nroles_path=./tests/requirements/:../' > ansible.cfg"
 
       - name: Set up Python 3.
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v6
         with:
           python-version: '3.9.x'
 
