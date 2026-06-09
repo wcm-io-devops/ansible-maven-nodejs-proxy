@@ -1,90 +1,97 @@
 ---
 - name: Fail when service manager is not supported.
-  fail:
+  ansible.builtin.fail:
     msg: "Currently only systems that are managed by systemd are supported"
   when: ansible_service_mgr != 'systemd'
 
 - name: Create maven-nodejs-proxy group.
-  group:
+  ansible.builtin.group:
     name: "{{ maven_nodejs_proxy_group }}"
     state: present
 
 - name: Create maven-nodejs-proxy user.
-  user:
+  ansible.builtin.user:
     name: "{{ maven_nodejs_proxy_user }}"
     group: "{{ maven_nodejs_proxy_group }}"
-    append: yes
-    system: yes
+    append: true
+    system: true
     state: present
 
 - name: Create maven-nodejs-proxy home folder.
-  file:
+  ansible.builtin.file:
     path: "{{ maven_nodejs_proxy_home }}"
     state: directory
     owner: "{{ maven_nodejs_proxy_user }}"
     group: "{{ maven_nodejs_proxy_group }}"
+    mode: "0755"
 
 - name: Create maven-nodejs-proxy log folder.
-  file:
+  ansible.builtin.file:
     path: "{{ maven_nodejs_proxy_log_dir }}"
     state: directory
     owner: "{{ maven_nodejs_proxy_user }}"
     group: "{{ maven_nodejs_proxy_group }}"
+    mode: "0755"
 
-- name: check if maven-nodejs-proxy is already there
-  stat:
+- name: Check if maven-nodejs-proxy is already there
+  ansible.builtin.stat:
     path: "{{ maven_nodejs_proxy_binary_path }}"
   register: maven_nodejs_proxy_binary_path_result
 
-- block:
+- name: Build and install maven-nodejs-proxy
+  when: maven_nodejs_proxy_force_compile or not maven_nodejs_proxy_binary_path_result.stat.exists
+  block:
     - name: Create maven-nodejs-proxy tmp folder.
-      file:
+      ansible.builtin.file:
         path: "{{ maven_nodejs_proxy_tmp }}"
         state: directory
+        mode: "0755"
 
     - name: Clone maven-nodejs-proxy in given version
-      git:
+      ansible.builtin.git:
         repo: "{{ maven_nodejs_proxy_repo }}"
         dest: "{{ maven_nodejs_proxy_tmp }}"
-        version: "{{ maven_nodejs_proxy_version|default(omit) }}"
-        force: yes
+        version: "{{ maven_nodejs_proxy_version | default(omit) }}"
+        force: true
         accept_hostkey: true
 
     - name: Build Maven command line.
-      set_fact:
+      ansible.builtin.set_fact:
         _mvn_cmdline: "{{ maven_nodejs_proxy_maven_cmd }} {{ maven_nodejs_proxy_maven_opts }} clean install -DskipTests"
 
     - name: Add custom Maven settings.
-      set_fact:
+      ansible.builtin.set_fact:
         _mvn_cmdline: "{{ _mvn_cmdline }} --settings={{ maven_nodejs_proxy_maven_settings }}"
       when: maven_nodejs_proxy_maven_settings is defined
 
     - name: Compile maven-nodejs-proxy with Maven.
-      command: "{{ _mvn_cmdline }}"
+      ansible.builtin.command: "{{ _mvn_cmdline }}"
       args:
         chdir: "{{ maven_nodejs_proxy_tmp }}"
+      changed_when: true
 
     - name: Copy compiled artifact to maven-nodejs-proxy home
-      copy:
-        remote_src: yes
+      ansible.builtin.copy:
+        remote_src: true
         src: "{{ maven_nodejs_proxy_tmp_binary_path }}"
         dest: "{{ maven_nodejs_proxy_binary_path }}"
         owner: "{{ maven_nodejs_proxy_user }}"
         group: "{{ maven_nodejs_proxy_group }}"
+        mode: "0644"
       notify:
-        - maven_nodejs_proxy restart
-  when: maven_nodejs_proxy_force_compile or not maven_nodejs_proxy_binary_path_result.stat.exists
+        - Maven_nodejs_proxy restart
 
 - name: Create config.yml and transfer to remote machine
-  template:
+  ansible.builtin.template:
     src: "templates/config.yml.j2"
     dest: "{{ maven_nodejs_proxy_config_path }}"
     owner: "{{ maven_nodejs_proxy_user }}"
     group: "{{ maven_nodejs_proxy_group }}"
+    mode: "0644"
   register: maven_nodejs_proxy_config
   notify:
-    - maven_nodejs_proxy restart
+    - Maven_nodejs_proxy restart
 
 - name: Setup maven-nodejs-proxy systemd unit.
-  include: systemd.yml
+  ansible.builtin.include_tasks: systemd.yml
   when: ansible_service_mgr == 'systemd'

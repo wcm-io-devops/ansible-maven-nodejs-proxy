@@ -3,7 +3,7 @@ maven_nodejs_proxy_maven_cmd: mvn
 maven_nodejs_proxy_maven_opts: "-B -U"
 maven_nodejs_proxy_repo: https://github.com/wcm-io-devops/maven-nodejs-proxy.git
 maven_nodejs_proxy_force_compile: false
-maven_nodejs_proxy_version: "1.2.0"
+maven_nodejs_proxy_version: "2.0.0"
 
 maven_nodejs_proxy_user: 'maven-nodejs-proxy'
 maven_nodejs_proxy_group: 'maven-nodejs-proxy'
@@ -15,7 +15,9 @@ maven_nodejs_proxy_binary_path: "{{ maven_nodejs_proxy_home }}/{{ maven_nodejs_p
 maven_nodejs_proxy_config_path: "{{ maven_nodejs_proxy_home }}/config.yml"
 
 maven_nodejs_proxy_tmp: /tmp/nodejs-proxy
-maven_nodejs_proxy_tmp_binary_path: "{{ maven_nodejs_proxy_tmp }}/maven-nodejs-proxy/target/{{ maven_nodejs_proxy_binary }}"
+maven_nodejs_proxy_tmp_binary_path: >-
+  {{ maven_nodejs_proxy_tmp }}/target/
+  {{ maven_nodejs_proxy_binary }}
 
 maven_nodejs_proxy_port: 8080
 
@@ -24,7 +26,9 @@ maven_nodejs_proxy_log_file: "{{ maven_nodejs_proxy_log_dir }}/maven-nodejs-prox
 maven_nodejs_proxy_log_file_archive: "{{ maven_nodejs_proxy_log_dir }}/maven-nodejs-proxy-%d.log"
 
 maven_nodejs_proxy_service_name: maven-nodejs-proxy
-maven_nodejs_proxy_service_args: "java -jar {{ maven_nodejs_proxy_binary_path }} server {{ maven_nodejs_proxy_config_path }}"
+maven_nodejs_proxy_service_args: >-
+  java -jar {{ maven_nodejs_proxy_binary_path }}
+  server {{ maven_nodejs_proxy_config_path }}
 
 # configuration
 maven_nodejs_proxy_config:
