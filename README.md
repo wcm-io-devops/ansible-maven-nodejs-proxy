@@ -7,10 +7,10 @@ Proxy](https://github.com/wcm-io-devops/maven-nodejs-proxy).
 
 This role requires
 
-* Ansible 2.0 or higher
+* Ansible 2.10 or higher
 * Maven 3.3.9 or higher
 * Git
-* JDK 1.8
+* JDK 21
 
 ## Role Variables
 
@@ -42,7 +42,7 @@ Controls if maven-nodejs-proxy is compiled on every run. When set to
 false the maven compile step will be skipped when the jar already exists
 
 ```yml
-maven_nodejs_proxy_version: "1.1.0"
+maven_nodejs_proxy_version: "2.0.0"
 ```
 
 The version (Commit,Branch,Tag) to checkout and compile.
@@ -175,7 +175,7 @@ The role has no hard coded depencencies but works well together with
       hosts: maven-nodejs-proxy
       vars:
         java_packages:
-          - openjdk-8-jdk
+          - openjdk-21-jdk
     
       roles:
         - role: geerlingguy.java
